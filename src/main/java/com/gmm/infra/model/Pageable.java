@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 @Getter
@@ -18,7 +19,7 @@ public class Pageable {
 
     @Builder
     private Pageable(int page, int size, Sort.Direction direction) {
-        this.page = page <= 0 ? 1 : page;
+        this.page = max(page, 1);
         this.size = min(size, MAX_SIZE);
         this.direction = direction;
     }
