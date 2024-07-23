@@ -24,7 +24,7 @@ public class Money {
     }
 
     public static Money of(double amount) {
-        return new Money(new BigDecimal(amount));
+        return new Money(BigDecimal.valueOf(amount));
     }
 
     public Money add(Money money) {
