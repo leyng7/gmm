@@ -6,6 +6,7 @@ import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
 import com.gmm.modules.stock.StockRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,23 +63,32 @@ class StockControllerTest {
     }
 
     @Test
-    void addStockFail() throws Exception {
+    @DisplayName("주식 주문 1개 등록 - 필수 값 확인")
+    void addStock2() throws Exception {
         // given
-        StockCreate request = StockFixture.anStockCreate().build();
+        StockCreate request = StockFixture.anStockCreate()
+                .ticker(null)
+                .orderPrice(null)
+                .orderDate(null)
+                .build();
         String json = objectMapper.writeValueAsString(request);
 
         // when
-        mockMvc.perform(post("/stocks")
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
+        ResultActions perform = mockMvc.perform(post("/stocks")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(json)
+        );
 
         // then
-        assertNotEquals(0L, stockRepository.count());
+        perform
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.ticker").value("티커를 입력해주세요."))
+                .andExpect(jsonPath("$.validation.orderPrice").value("주문 금액을 입력해주세요."))
+                .andExpect(jsonPath("$.validation.orderDate").value("주문일을 입력해주세요."))
+                .andDo(print());
     }
-
 
     @Test
     void getStocks() throws Exception {
