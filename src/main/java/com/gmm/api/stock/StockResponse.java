@@ -19,4 +19,5 @@ public class StockResponse {
         this.quantity = stock.getQuantity();
         this.orderPrice = stock.getOrderPrice().getValue();
     }
+
 }

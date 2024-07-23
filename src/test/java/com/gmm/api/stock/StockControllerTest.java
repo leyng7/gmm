@@ -101,4 +101,22 @@ class StockControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    void getStock() throws Exception {
+        // given
+        Stock stock = StockFixture.anStock().build();
+        stockRepository.save(stock);
+
+        // when
+        mockMvc.perform(get("/stocks/{stockId}", stock.getId())
+                        .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(stock.getId()))
+                .andExpect(jsonPath("$.ticker").value(stock.getTicker()))
+                .andExpect(jsonPath("$.quantity").value(stock.getQuantity()))
+                .andExpect(jsonPath("$.orderPrice").value(stock.getOrderPrice().getValue()))
+                .andDo(print());
+    }
+
 }
