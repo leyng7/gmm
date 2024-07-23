@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -46,14 +49,16 @@ class StockControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         // when
-        mockMvc.perform(post("/stocks")
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .content(json)
-                )
+        ResultActions perform = mockMvc.perform(post("/stocks")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(json)
+        );
+
+        // then
+        perform
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        // then
         assertEquals(1L, stockRepository.count());
     }
 
@@ -83,13 +88,16 @@ class StockControllerTest {
         Stock stock2 = StockFixture.anStock()
                 .ticker("VOO")
                 .build();
-        stockRepository.save(stock);
+        stockRepository.saveAll(List.of(stock, stock2));
         stockRepository.save(stock2);
 
         // when
-        mockMvc.perform(get("/stocks?page=1&size=10")
-                        .contentType(APPLICATION_JSON_VALUE)
-                )
+        ResultActions perform = mockMvc.perform(get("/stocks?page=1&size=10")
+                .contentType(APPLICATION_JSON_VALUE)
+        );
+
+        // then
+        perform
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.page").value(1))
                 .andExpect(jsonPath("$.size").value(10))
@@ -108,9 +116,12 @@ class StockControllerTest {
         stockRepository.save(stock);
 
         // when
-        mockMvc.perform(get("/stocks/{stockId}", stock.getId())
-                        .contentType(APPLICATION_JSON_VALUE)
-                )
+        ResultActions perform = mockMvc.perform(get("/stocks/{stockId}", stock.getId())
+                .contentType(APPLICATION_JSON_VALUE)
+        );
+
+        // then
+        perform
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(stock.getId()))
                 .andExpect(jsonPath("$.ticker").value(stock.getTicker()))
