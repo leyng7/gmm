@@ -1,6 +1,7 @@
 package com.gmm.modules.stock;
 
 import com.gmm.infra.model.Money;
+import com.gmm.infra.model.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class StockService {
         return stockRepository.getStock(stockId);
     }
 
-    public Page<Stock> getPageOfStock() {
-        return null;
+    public Page<Stock> getPageOfStock(Pageable pageable) {
+        return stockRepository.findAll(pageable.of());
     }
 
     @Transactional

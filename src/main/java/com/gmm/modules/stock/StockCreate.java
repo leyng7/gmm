@@ -1,8 +1,8 @@
 package com.gmm.modules.stock;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,19 +12,13 @@ public record StockCreate(
         @NotBlank(message = "티커를 입력해주세요.")
         String ticker,
         int quantity,
+        @NotNull(message = "주문 금액을 입력해주세요.")
         BigDecimal orderPrice,
+        @NotNull(message = "주문일을 입력해주세요.")
         LocalDate orderDate
 ) {
 
     public void validate() {
-        if (ticker == null || ticker.isEmpty()) {
-            throw new IllegalArgumentException("ticker");
-        }
-        if (orderPrice == null) {
-            throw new IllegalArgumentException("orderPrice");
-        }
-        if (orderDate == null) {
-            throw new IllegalArgumentException("orderDate");
-        }
+
     }
 }

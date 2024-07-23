@@ -1,17 +1,22 @@
 package com.gmm.api.stock;
 
+import com.gmm.infra.model.PageResponse;
+import com.gmm.infra.model.Pageable;
+import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
 import com.gmm.modules.stock.StockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-public class StockController  {
+public class StockController {
 
     private final StockService stockService;
 
@@ -25,5 +30,10 @@ public class StockController  {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/stocks")
+    public PageResponse<StockResponse> getStocks(Pageable pageable) {
+        Page<Stock> page = stockService.getPageOfStock(pageable);
+        return PageResponse.of(page, StockResponse.class);
+    }
 
 }

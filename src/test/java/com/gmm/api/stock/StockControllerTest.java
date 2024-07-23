@@ -2,23 +2,20 @@ package com.gmm.api.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmm.domain.StockFixture;
-import com.gmm.infra.model.Money;
+import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
 import com.gmm.modules.stock.StockRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -78,5 +75,30 @@ class StockControllerTest {
         assertNotEquals(0L, stockRepository.count());
     }
 
+
+    @Test
+    void getStocks() throws Exception {
+        // given
+        Stock stock = StockFixture.anStock().build();
+        Stock stock2 = StockFixture.anStock()
+                .ticker("VOO")
+                .build();
+        stockRepository.save(stock);
+        stockRepository.save(stock2);
+
+        // when
+        mockMvc.perform(get("/stocks?page=1&size=10")
+                        .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page").value(1))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.totalCount").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(stock.getId()))
+                .andExpect(jsonPath("$.items[0].ticker").value(stock.getTicker()))
+                .andExpect(jsonPath("$.items[0].quantity").value(stock.getQuantity()))
+                .andExpect(jsonPath("$.items[0].orderPrice").value(stock.getOrderPrice().getValue()))
+                .andDo(print());
+    }
 
 }
