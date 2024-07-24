@@ -1,81 +1,84 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
+
+const drawer = ref(true)
+const title = ref('');
+
+const items = ref([
+  {
+    title: 'Dashboard',
+    prependIcon: 'mdi-view-dashboard-outline',
+    link: true
+  },
+  {
+    title: 'Team',
+    prependIcon: 'mdi-account-group',
+    link: true,
+    to: '/about'
+  },
+  {
+    title: 'Projects',
+    prependIcon: 'mdi-briefcase-outline',
+    link: true,
+    to: '/'
+  },
+  {
+    title: 'Calendar',
+    prependIcon: 'mdi-calendar',
+    link: true
+  },
+  {
+    title: 'Reports',
+    prependIcon: 'mdi-file-chart-outline',
+    link: true
+  }
+])
 </script>
 
 <template>
-  <header>
-    <v-btn>Click me</v-btn>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <v-layout>
+    <v-navigation-drawer v-model="drawer">
+      <v-list density="compact" item-props :items="items" nav />
+      <template #append>
+        <v-list-item
+          class="ma-2"
+          link
+          nav
+          prepend-icon="mdi-cog-outline"
+          title="Settings"
+        />
+      </template>
+    </v-navigation-drawer>
+    <v-app-bar border="b" class="ps-4" flat>
+      <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
+      <v-app-bar-title>Application</v-app-bar-title>
+      <template #append>
+        <v-btn class="text-none me-2" height="48" icon slim>
+          <v-avatar color="surface-light" image="https://cdn.vuetifyjs.com/images/john.png" size="32" />
+          <v-menu activator="parent">
+            <v-list density="compact" nav>
+              <v-list-item append-icon="mdi-cog-outline" link title="Settings" />
+              <v-list-item append-icon="mdi-logout" link title="Logout" />
+            </v-list>
+          </v-menu>
+        </v-btn>
+      </template>
+    </v-app-bar>
+    <v-main>
+      <div class="pa-4">
+        <v-sheet
+          border="dashed md"
+          color="surface-light"
+          rounded="lg"
+          width="100%"
+        >
+          <RouterView />
+        </v-sheet>
+      </div>
+    </v-main>
+  </v-layout>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>
