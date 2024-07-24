@@ -2,36 +2,20 @@
 import { ref } from 'vue'
 
 const drawer = ref(true)
-const title = ref('');
 
 const items = ref([
   {
-    title: 'Dashboard',
+    title: '주식 관리',
     prependIcon: 'mdi-view-dashboard-outline',
-    link: true
+    link: true,
+    to: '/stocks'
   },
   {
-    title: 'Team',
+    title: '배당금 관리',
     prependIcon: 'mdi-account-group',
     link: true,
     to: '/about'
   },
-  {
-    title: 'Projects',
-    prependIcon: 'mdi-briefcase-outline',
-    link: true,
-    to: '/'
-  },
-  {
-    title: 'Calendar',
-    prependIcon: 'mdi-calendar',
-    link: true
-  },
-  {
-    title: 'Reports',
-    prependIcon: 'mdi-file-chart-outline',
-    link: true
-  }
 ])
 </script>
 
@@ -51,7 +35,7 @@ const items = ref([
     </v-navigation-drawer>
     <v-app-bar border="b" class="ps-4" flat>
       <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
-      <v-app-bar-title>Application</v-app-bar-title>
+      <v-app-bar-title>Give Me Money</v-app-bar-title>
       <template #append>
         <v-btn class="text-none me-2" height="48" icon slim>
           <v-avatar color="surface-light" image="https://cdn.vuetifyjs.com/images/john.png" size="32" />
@@ -68,7 +52,6 @@ const items = ref([
       <div class="pa-4">
         <v-sheet
           border="dashed md"
-          color="surface-light"
           rounded="lg"
           width="100%"
         >
