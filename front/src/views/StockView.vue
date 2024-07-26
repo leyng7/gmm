@@ -1,15 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
 import StockDialog from '@/components/stock/StockDialog.vue'
 import StockTable from '@/components/stock/StockTable.vue'
-
-type StateType = {
-  dialog: boolean
-}
-
-const state = reactive<StateType>({
-  dialog: false
-})
 </script>
 
 <template>

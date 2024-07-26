@@ -14,12 +14,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "axios": "^1.6.8",
     "class-transformer": "^0.5.1",
+    "date-fns": "^3.6.0",
     "element-plus": "^2.7.1",
+    "pinia": "^2.1.7",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0",
-    "@mdi/font": "^7.4.47",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

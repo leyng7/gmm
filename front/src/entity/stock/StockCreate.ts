@@ -1,12 +1,10 @@
-export default class Stock {
-  public readonly id: number | null
+export default class StockCreate {
   public readonly ticker: string
   public readonly quantity: number
   public readonly orderPrice: number
   public readonly orderDate: string
 
-  constructor(id: number | null, ticker: string, quantity: number, orderPrice: number, orderDate: string) {
-    this.id = id
+  constructor(ticker: string, quantity: number, orderPrice: number, orderDate: string) {
     this.ticker = ticker
     this.quantity = quantity
     this.orderPrice = orderPrice

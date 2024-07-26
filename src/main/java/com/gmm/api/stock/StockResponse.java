@@ -12,12 +12,14 @@ public class StockResponse {
     private final String ticker;
     private final int quantity;
     private final BigDecimal orderPrice;
+    private final String orderDate;
 
     public StockResponse(Stock stock) {
         this.id = stock.getId();
         this.ticker = stock.getTicker();
         this.quantity = stock.getQuantity();
         this.orderPrice = stock.getOrderPrice().getValue();
+        this.orderDate = stock.getOrderDate().toString();
     }
 
 }

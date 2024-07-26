@@ -1,9 +1,11 @@
 import { inject, singleton } from 'tsyringe'
 import Stock from '@/entity/stock/Stock'
 import HttpRepository from '@/repository/HttpRepository'
+import Page from '@/entity/data/Page'
+import StockCreate from '@/entity/stock/StockCreate'
 
 @singleton()
-export default class LetterRepository {
+export default class StockRepository {
   private readonly httpRepository: HttpRepository
 
   constructor(@inject(HttpRepository) httpRepository: HttpRepository) {
@@ -17,15 +19,15 @@ export default class LetterRepository {
   }
 
   public getPageOfStock() {
-    return this.httpRepository.get<Stock>({
+    return this.httpRepository.get<Page<Stock>>({
       path: `/api/stocks`
-    }, Stock)
+    }, Page)
   }
 
-  public addStock(gardenId: string, content: string) {
+  public addStock(request: StockCreate) {
     return this.httpRepository.post({
-      path: `/api/gardens/${gardenId}/letters`,
-      body: { content: content }
+      path: `/api/stocks`,
+      body: request
     })
   }
 

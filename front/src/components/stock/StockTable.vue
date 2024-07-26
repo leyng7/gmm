@@ -1,41 +1,40 @@
 <script setup lang="ts">
-const headers = [
+import { useStockStore } from '@/stores/stockStore'
+import { onMounted } from 'vue'
+
+const stockStore = useStockStore()
+
+const headers: any [] = [
   {
     title: '티커',
-    key: 'ticker'
+    key: 'ticker',
+    align: 'center'
   },
   {
     title: '수량',
-    key: 'quantity'
+    key: 'quantity',
+    align: 'center'
   },
   {
     title: '주문 금액',
-    key: 'orderPrice'
+    key: 'orderPrice',
+    align: 'center'
   },
   {
     title: '주문일',
-    key: 'orderDate'
+    key: 'orderDate',
+    align: 'center'
   },
   {
     title: '관리',
-    key: 'actions'
+    key: 'actions',
+    align: 'center'
   }
 ]
 
-const items = [
-  {
-    ticker: 'O',
-    quantity: 3,
-    orderPrice: 56.78,
-    orderDate: '2024-07-24'
-  },
-  {
-    ticker: 'O',
-    quantity: -1,
-    orderPrice: 56.78,
-    orderDate: '2024-07-24'
-  }
-]
+onMounted(async () => {
+  await stockStore.fetchStocks()
+})
 </script>
 
 <template>
@@ -43,7 +42,7 @@ const items = [
     class="bg-transparent"
     :headers="headers"
     hide-default-footer
-    :items="items"
+    :items="stockStore.pageOfStock.items"
   >
     <template #item.actions>
       <v-btn
