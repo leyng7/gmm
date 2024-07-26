@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { format } from 'date-fns'
 import StockCreate from '@/entity/stock/StockCreate'
-import { useStockStore } from '@/stores/stockStore'
+import { useStockStore } from '@/stores/StockStore'
 
 const stockStore = useStockStore()
 
@@ -13,11 +12,14 @@ type StateType = {
 
 const state = reactive<StateType>({
   dialog: false,
-  stock: new StockCreate('', 0, 0, format(new Date(), 'yyyy-MM-dd'))
+  stock: new StockCreate()
 })
 
-function addStock() {
-  stockStore.addStock(state.stock)
+async function addStock () {
+  await stockStore.addStock(state.stock)
+  await stockStore.fetchStocks()
+
+  state.stock = new StockCreate()
   state.dialog = false
 }
 </script>

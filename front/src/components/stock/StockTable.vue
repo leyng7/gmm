@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useStockStore } from '@/stores/stockStore'
-import { onMounted } from 'vue'
+import { useStockStore } from '@/stores/StockStore'
+import { onMounted, watch } from 'vue'
 
 const stockStore = useStockStore()
 
@@ -32,7 +32,12 @@ const headers: any [] = [
   }
 ]
 
+watch(stockStore.pageable, async () => {
+  await stockStore.fetchStocks()
+})
+
 onMounted(async () => {
+  stockStore.pageable.page = 1
   await stockStore.fetchStocks()
 })
 </script>
@@ -63,6 +68,14 @@ onMounted(async () => {
       />
     </template>
   </v-data-table>
+  <div class="text-center">
+    <v-pagination
+      v-model="stockStore.pageable.page"
+      :length="stockStore.pageOfStock.totalPage"
+      :total-visible="5"
+      rounded="circle"
+    ></v-pagination>
+  </div>
 </template>
 
 <style scoped>

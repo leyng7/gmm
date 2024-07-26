@@ -3,6 +3,7 @@ import Stock from '@/entity/stock/Stock'
 import HttpRepository from '@/repository/HttpRepository'
 import Page from '@/entity/data/Page'
 import StockCreate from '@/entity/stock/StockCreate'
+import type Pageable from '@/entity/data/Pageable'
 
 @singleton()
 export default class StockRepository {
@@ -18,9 +19,10 @@ export default class StockRepository {
     }, Stock)
   }
 
-  public getPageOfStock() {
-    return this.httpRepository.get<Page<Stock>>({
-      path: `/api/stocks`
+  public getPageOfStock(pageable: Pageable)  {
+    return this.httpRepository.getPageOf<Stock>({
+      path: `/api/stocks`,
+      params: pageable
     }, Page)
   }
 

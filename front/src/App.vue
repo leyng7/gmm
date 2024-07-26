@@ -14,7 +14,7 @@ const items = ref([
     title: '배당금 관리',
     prependIcon: 'mdi-account-group',
     link: true,
-    to: '/about'
+    to: '/'
   },
 ])
 </script>
