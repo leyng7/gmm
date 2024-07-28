@@ -78,9 +78,22 @@ const option = ref({
 
 async function fetchChart() {
   const stockCharts = await stockRepository.getChartOfStock()
-  const totalValue = stockCharts.reduce((acc, item) => acc + item.value, 0);
+  const totalValue = stockCharts.reduce((acc, item) => acc + item.value, 0)
 
-  option.value.series[0].data = stockCharts;
+  option.value.series[0].data = stockCharts
+  option.value.title.text = `$ ${totalValue.toLocaleString()}`
+}
+
+const getSelectedTotal = (legendSelected: Record<string, boolean>): number => {
+  return option.value.series[0].data
+    .filter(item => legendSelected[item.name])
+    .reduce((total, item) => total + item.value, 0)
+}
+
+
+function updateTitle(params: any) {
+  const selected = params.selected
+  const totalValue = getSelectedTotal(selected)
   option.value.title.text = `$ ${totalValue.toLocaleString()}`
 }
 
@@ -96,8 +109,8 @@ onMounted(() => {
         border="dashed md"
         rounded="lg"
       >
-        <div class="pa-2">주식 비중</div>
-        <v-chart class="chart" :option="option" autoresize />
+        <h3 class="pa-2">주식 비중</h3>
+        <v-chart class="chart" :option="option" @legendselectchanged="updateTitle" autoresize />
       </v-sheet>
     </v-col>
     <v-col cols="12" md="6">
