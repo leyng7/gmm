@@ -51,5 +51,13 @@ public class StockController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/stocks/{stockId}")
+    public ResponseEntity<Void> deleteStock(
+            @PathVariable Long stockId
+    ) {
+        stockService.deleteStock(stockId);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

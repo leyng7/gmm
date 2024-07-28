@@ -2,8 +2,12 @@
 import Pageable from '@/entity/data/Pageable'
 import Page from '@/entity/data/Page'
 import type Stock from '@/entity/stock/Stock'
+import { container } from 'tsyringe'
+import StockRepository from '@/repository/StockRepository'
 
-defineProps<{
+const stockRepository = container.resolve(StockRepository)
+
+const props = defineProps<{
   pageable: Pageable,
   pageOfStock: Page<Stock>
 }>()
@@ -42,8 +46,18 @@ const headers: any [] = [
 ]
 
 function fetchStock(stockId: number | null) {
-  if (!stockId) return;
+  if (!stockId) return
   emit('fetchStock', stockId)
+}
+
+function deleteStock(stockId: number | null) {
+  if (stockId === null) return
+  if (confirm('삭제하시겠습니까?')) {
+    stockRepository.deleteStock(stockId)
+      .then(() => {
+        emit('fetchPageOfStock', props.pageable)
+      })
+  }
 }
 </script>
 
@@ -72,6 +86,7 @@ function fetchStock(stockId: number | null) {
         slim
         text="삭제"
         variant="text"
+        @click="deleteStock(item.id)"
       />
     </template>
   </v-data-table>

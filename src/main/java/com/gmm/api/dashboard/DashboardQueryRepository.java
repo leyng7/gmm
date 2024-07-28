@@ -15,7 +15,6 @@ public class DashboardQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-
     public List<ChartResponse> getChartOfStock() {
         return jpaQueryFactory
                 .select(Projections.constructor(
