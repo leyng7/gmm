@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { useStockStore } from '@/stores/StockStore'
-import { onMounted, watch } from 'vue'
+import Pageable from '@/entity/data/Pageable'
+import Page from '@/entity/data/Page'
+import type Stock from '@/entity/stock/Stock'
 
-const stockStore = useStockStore()
+defineProps<{
+  pageable: Pageable,
+  pageOfStock: Page<Stock>
+}>()
+
+const emit = defineEmits<{
+  fetchPageOfStock: [pagable: Pageable]
+}>()
 
 const headers: any [] = [
   {
@@ -31,23 +39,15 @@ const headers: any [] = [
     align: 'center'
   }
 ]
-
-watch(stockStore.pageable, async () => {
-  await stockStore.fetchStocks()
-})
-
-onMounted(async () => {
-  stockStore.pageable.page = 1
-  await stockStore.fetchStocks()
-})
 </script>
 
 <template>
   <v-data-table
     class="bg-transparent"
     :headers="headers"
+    :disable-sort="true"
     hide-default-footer
-    :items="stockStore.pageOfStock.items"
+    :items="pageOfStock.items"
   >
     <template #item.actions>
       <v-btn
@@ -70,8 +70,9 @@ onMounted(async () => {
   </v-data-table>
   <div class="text-center">
     <v-pagination
-      v-model="stockStore.pageable.page"
-      :length="stockStore.pageOfStock.totalPage"
+      v-model="pageable.page"
+      @update:model-value="emit('fetchPageOfStock', pageable)"
+      :length="pageOfStock.totalPage"
       :total-visible="5"
       rounded="circle"
     ></v-pagination>

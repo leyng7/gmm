@@ -11,7 +11,7 @@ const stockRepository = container.resolve(StockRepository)
 
 export const useStockStore = defineStore('stock', {
   state: () => ({
-    pageable: new Pageable(1, 5),
+    pageable: new Pageable(),
     pageOfStock: new Page<Stock>(1, 20, 0, [])
   }),
   actions: {

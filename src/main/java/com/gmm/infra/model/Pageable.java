@@ -31,7 +31,7 @@ public class Pageable {
     }
 
     public PageRequest of() {
-        return PageRequest.of(page - 1, size);
+        return PageRequest.of(page - 1, size, Sort.Direction.DESC, "id");
     }
 
 }
