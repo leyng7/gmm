@@ -1,36 +1,3 @@
-<template>
-  <v-sheet
-    border="dashed md"
-    rounded="lg"
-    width="100%"
-  >
-    <section class="pa-md-6">
-      <h3 class="d-flex justify-space-between align-center text-subtitle-1 font-weight-bold">
-        주식 관리
-        <stock-add-dialog
-          @fetch-page-of-stock="fetchPageOfStock"
-        />
-      </h3>
-      <div class="text-body-2 text-medium-emphasis mb-4 w-100 w-md-75">
-        구매하거나 판매한 주식을 입력할 수 있습니다.
-      </div>
-      <stock-table
-        :pageable="state.pageable"
-        :page-of-stock="state.pageOfStock"
-        @fetch-page-of-stock="fetchPageOfStock"
-        @fetch-stock="fetchStock"
-      />
-      <stock-edit-dialog
-        :dialog="state.editDialog"
-        :stock="state.stock"
-        @fetch-page-of-stock="fetchPageOfStock"
-        @edit-stock="editStock"
-        @close-edit-dialog="closeEditDialog"
-      />
-    </section>
-  </v-sheet>
-</template>
-
 <script setup lang="ts">
 import StockAddDialog from '@/components/stock/StockAddDialog.vue'
 import StockEditDialog from '@/components/stock/StockEditDialog.vue'
@@ -94,6 +61,39 @@ onMounted(() => {
 })
 
 </script>
+
+<template>
+  <v-sheet
+    border="dashed md"
+    rounded="lg"
+    width="100%"
+  >
+    <section class="pa-md-6">
+      <h3 class="d-flex justify-space-between align-center text-subtitle-1 font-weight-bold">
+        주식 관리
+        <stock-add-dialog
+          @fetch-page-of-stock="fetchPageOfStock"
+        />
+      </h3>
+      <div class="text-body-2 text-medium-emphasis mb-4 w-100 w-md-75">
+        구매하거나 판매한 주식을 입력할 수 있습니다.
+      </div>
+      <stock-table
+        :pageable="state.pageable"
+        :page-of-stock="state.pageOfStock"
+        @fetch-page-of-stock="fetchPageOfStock"
+        @fetch-stock="fetchStock"
+      />
+      <stock-edit-dialog
+        :dialog="state.editDialog"
+        :stock="state.stock"
+        @fetch-page-of-stock="fetchPageOfStock"
+        @edit-stock="editStock"
+        @close-edit-dialog="closeEditDialog"
+      />
+    </section>
+  </v-sheet>
+</template>
 
 <style scoped>
 

@@ -16,12 +16,12 @@ public class DashboardQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
 
-    public List<ChartResponse> getDashboardOfStock() {
+    public List<ChartResponse> getChartOfStock() {
         return jpaQueryFactory
                 .select(Projections.constructor(
                         ChartResponse.class,
                         stock.ticker,
-                        stock.orderPrice.sum()
+                        stock.orderPrice.multiply(stock.quantity).sum()
                 ))
                 .from(stock)
                 .groupBy(stock.ticker)

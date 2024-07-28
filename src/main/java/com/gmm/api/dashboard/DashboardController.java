@@ -14,7 +14,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard/stocks")
     public List<ChartResponse> getDashboardOfStock() {
-        return dashboardQueryRepository.getDashboardOfStock();
+        return dashboardQueryRepository.getChartOfStock();
     }
 
 }
