@@ -18,7 +18,7 @@ public class StockResponse {
         this.id = stock.getId();
         this.ticker = stock.getTicker();
         this.quantity = stock.getQuantity();
-        this.orderPrice = stock.getOrderPrice().getValue();
+        this.orderPrice = stock.getOrderPrice();
         this.orderDate = stock.getOrderDate().toString();
     }
 

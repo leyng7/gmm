@@ -2,8 +2,9 @@ import { inject, singleton } from 'tsyringe'
 import Stock from '@/entity/stock/Stock'
 import HttpRepository from '@/repository/HttpRepository'
 import Page from '@/entity/data/Page'
-import StockCreate from '@/entity/stock/StockCreate'
+import StockAdd from '@/entity/stock/StockAdd'
 import type Pageable from '@/entity/data/Pageable'
+import type StockEdit from '@/entity/stock/StockEdit'
 
 @singleton()
 export default class StockRepository {
@@ -26,11 +27,23 @@ export default class StockRepository {
     }, Page)
   }
 
-  public addStock(request: StockCreate) {
+  public addStock(request: StockAdd) {
     return this.httpRepository.post({
       path: `/api/stocks`,
       body: request
     })
   }
 
+  async editStock(stockId: number, stockEdit: StockEdit) {
+    return this.httpRepository.patch({
+      path: `/api/stocks/${stockId}`,
+      body: stockEdit
+    })
+  }
+
+  async deleteStock(stockId: number) {
+    return this.httpRepository.delete({
+      path: `/api/stocks/${stockId}`
+    })
+  }
 }

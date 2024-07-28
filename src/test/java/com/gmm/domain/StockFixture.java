@@ -1,6 +1,5 @@
 package com.gmm.domain;
 
-import com.gmm.infra.model.Money;
 import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
 
@@ -26,7 +25,7 @@ public class StockFixture {
         return Stock.builder()
                 .ticker(ticker)
                 .quantity(quantity)
-                .orderPrice(Money.of(orderPrice))
+                .orderPrice(orderPrice)
                 .orderDate(orderDate);
     }
 

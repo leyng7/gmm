@@ -4,6 +4,7 @@ import com.gmm.infra.model.PageResponse;
 import com.gmm.infra.model.Pageable;
 import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
+import com.gmm.modules.stock.StockEdit;
 import com.gmm.modules.stock.StockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,15 @@ public class StockController {
         Stock stock = stockService.getStock(stockId);
         return new StockResponse(stock);
     }
+
+    @PatchMapping("/stocks/{stockId}")
+    public ResponseEntity<Void> editStock(
+            @PathVariable Long stockId,
+            @RequestBody @Valid StockEdit request
+    ) {
+        stockService.editStock(stockId, request);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

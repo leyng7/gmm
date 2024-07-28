@@ -9,7 +9,8 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  fetchPageOfStock: [pagable: Pageable]
+  fetchPageOfStock: [pagable: Pageable],
+  fetchStock: [stockId: number]
 }>()
 
 const headers: any [] = [
@@ -39,6 +40,11 @@ const headers: any [] = [
     align: 'center'
   }
 ]
+
+function fetchStock(stockId: number | null) {
+  if (!stockId) return;
+  emit('fetchStock', stockId)
+}
 </script>
 
 <template>
@@ -49,7 +55,7 @@ const headers: any [] = [
     hide-default-footer
     :items="pageOfStock.items"
   >
-    <template #item.actions>
+    <template #item.actions="{ item }">
       <v-btn
         class="text-none"
         color="primary"
@@ -57,6 +63,7 @@ const headers: any [] = [
         slim
         text="수정"
         variant="text"
+        @click="fetchStock(item.id)"
       />
       <v-btn
         class="text-none"

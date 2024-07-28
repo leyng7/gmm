@@ -5,6 +5,12 @@ const drawer = ref(true)
 
 const items = ref([
   {
+    title: '대시보드',
+    prependIcon: 'mdi-view-dashboard-outline',
+    link: true,
+    to: '/chart'
+  },
+  {
     title: '주식 관리',
     prependIcon: 'mdi-view-dashboard-outline',
     link: true,
@@ -50,13 +56,7 @@ const items = ref([
     </v-app-bar>
     <v-main>
       <div class="pa-4">
-        <v-sheet
-          border="dashed md"
-          rounded="lg"
-          width="100%"
-        >
           <RouterView />
-        </v-sheet>
       </div>
     </v-main>
   </v-layout>

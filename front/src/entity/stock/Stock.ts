@@ -13,4 +13,8 @@ export default class Stock {
     this.orderDate = orderDate
   }
 
+  static createEmptyStock(): Stock {
+    return new Stock(null, '', 0, 0, '')
+  }
+
 }

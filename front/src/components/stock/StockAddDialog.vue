@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import StockCreate from '@/entity/stock/StockCreate'
+import StockAdd from '@/entity/stock/StockAdd'
 import { container } from 'tsyringe'
 import StockRepository from '@/repository/StockRepository'
 import Pageable from '@/entity/data/Pageable'
@@ -13,18 +13,18 @@ const emit = defineEmits<{
 
 type StateType = {
   dialog: boolean,
-  stock: StockCreate
+  stock: StockAdd
 }
 
 const state = reactive<StateType>({
   dialog: false,
-  stock: new StockCreate()
+  stock: StockAdd.createEmpty()
 })
 
 async function addStock() {
   await stockRepository.addStock(state.stock)
   emit('fetchPageOfStock', new Pageable())
-  state.stock = new StockCreate()
+  state.stock = StockAdd.createEmpty()
   state.dialog = false
 }
 </script>

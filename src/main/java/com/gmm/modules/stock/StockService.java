@@ -1,6 +1,5 @@
 package com.gmm.modules.stock;
 
-import com.gmm.infra.model.Money;
 import com.gmm.infra.model.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ public class StockService {
         Stock stock = Stock.builder()
                 .ticker(stockCreate.ticker())
                 .quantity(stockCreate.quantity())
-                .orderPrice(Money.of(stockCreate.orderPrice()))
+                .orderPrice(stockCreate.orderPrice())
                 .orderDate(stockCreate.orderDate())
                 .build();
 
@@ -35,12 +34,12 @@ public class StockService {
     }
 
     @Transactional
-    public void modifyStock(Long stockId, StockEdit stockEdit) {
+    public void editStock(Long stockId, StockEdit stockEdit) {
         Stock stock = stockRepository.getStock(stockId);
         stock.edit(
                 stockEdit.ticker(),
                 stockEdit.quantity(),
-                Money.of(stockEdit.orderPrice()),
+                stockEdit.orderPrice(),
                 stockEdit.orderDate()
         );
     }

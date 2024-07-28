@@ -1,18 +1,13 @@
 package com.gmm.modules.stock;
 
 import com.gmm.domain.StockFixture;
-import com.gmm.infra.model.Money;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 class StockServiceTest {
@@ -68,12 +63,12 @@ class StockServiceTest {
         assertEquals(stockId, findStock.getId());
         assertEquals(stockCreate.ticker(), findStock.getTicker());
         assertEquals(stockCreate.quantity(), findStock.getQuantity());
-        assertEquals(stockCreate.orderPrice(), findStock.getOrderPrice().getValue());
+        assertEquals(stockCreate.orderPrice(), findStock.getOrderPrice());
         assertEquals(stockCreate.orderDate(), findStock.getOrderDate());
     }
 
     @Test
-    void modifyStock() {
+    void editStock() {
         // Given
         Stock stock = StockFixture.anStock().build();
         stockRepository.save(stock);
@@ -85,11 +80,11 @@ class StockServiceTest {
                 .builder()
                 .ticker(stock.getTicker())
                 .quantity(newQuantity)
-                .orderPrice(stock.getOrderPrice().getValue())
+                .orderPrice(stock.getOrderPrice())
                 .orderDate(stock.getOrderDate())
                 .build();
 
-        stockService.modifyStock(stock.getId(), stockEdit);
+        stockService.editStock(stock.getId(), stockEdit);
         Stock findStock = stockRepository.getStock(stock.getId());
 
         // Then

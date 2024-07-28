@@ -114,7 +114,7 @@ class StockControllerTest {
                 .andExpect(jsonPath("$.items[0].id").value(stock.getId()))
                 .andExpect(jsonPath("$.items[0].ticker").value(stock.getTicker()))
                 .andExpect(jsonPath("$.items[0].quantity").value(stock.getQuantity()))
-                .andExpect(jsonPath("$.items[0].orderPrice").value(stock.getOrderPrice().getValue()))
+                .andExpect(jsonPath("$.items[0].orderPrice").value(stock.getOrderPrice()))
                 .andDo(print());
     }
 
@@ -135,7 +135,7 @@ class StockControllerTest {
                 .andExpect(jsonPath("$.id").value(stock.getId()))
                 .andExpect(jsonPath("$.ticker").value(stock.getTicker()))
                 .andExpect(jsonPath("$.quantity").value(stock.getQuantity()))
-                .andExpect(jsonPath("$.orderPrice").value(stock.getOrderPrice().getValue()))
+                .andExpect(jsonPath("$.orderPrice").value(stock.getOrderPrice()))
                 .andDo(print());
     }
 

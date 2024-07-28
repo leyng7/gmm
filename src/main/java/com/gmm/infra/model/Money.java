@@ -31,6 +31,10 @@ public class Money {
         return new Money(value.add(money.value));
     }
 
+    public Money multiply(BigDecimal value) {
+        return new Money(value.multiply(value));
+    }
+
     @Override
     public String toString() {
         return Objects.toString(value);

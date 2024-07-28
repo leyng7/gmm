@@ -4,7 +4,7 @@ import { container } from 'tsyringe'
 import StockRepository from '@/repository/StockRepository'
 import Page from '@/entity/data/Page'
 import type Stock from '@/entity/stock/Stock'
-import type StockCreate from '@/entity/stock/StockCreate'
+import type StockAdd from '@/entity/stock/StockAdd'
 import Pageable from '@/entity/data/Pageable'
 
 const stockRepository = container.resolve(StockRepository)
@@ -18,7 +18,7 @@ export const useStockStore = defineStore('stock', {
     async fetchStocks() {
       this.pageOfStock = await stockRepository.getPageOfStock(this.pageable)
     },
-    async addStock(request: StockCreate) {
+    async addStock(request: StockAdd) {
       await stockRepository.addStock(request)
     }
   },
