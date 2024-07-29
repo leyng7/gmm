@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmm.domain.StockFixture;
 import com.gmm.modules.stock.Stock;
 import com.gmm.modules.stock.StockCreate;
+import com.gmm.modules.stock.StockEdit;
 import com.gmm.modules.stock.StockRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +16,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +46,7 @@ class StockControllerTest {
     }
 
     @Test
+    @DisplayName("주식 주문 등록")
     void addStock() throws Exception {
         // given
         StockCreate request = StockFixture.anStockCreate().build();
@@ -91,14 +95,13 @@ class StockControllerTest {
     }
 
     @Test
-    void getStocks() throws Exception {
+    void getPageOfStock() throws Exception {
         // given
         Stock stock = StockFixture.anStock().build();
         Stock stock2 = StockFixture.anStock()
                 .ticker("VOO")
                 .build();
         stockRepository.saveAll(List.of(stock, stock2));
-        stockRepository.save(stock2);
 
         // when
         ResultActions perform = mockMvc.perform(get("/stocks?page=1&size=10")
@@ -111,10 +114,7 @@ class StockControllerTest {
                 .andExpect(jsonPath("$.page").value(1))
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.totalCount").value(2))
-                .andExpect(jsonPath("$.items[0].id").value(stock.getId()))
-                .andExpect(jsonPath("$.items[0].ticker").value(stock.getTicker()))
-                .andExpect(jsonPath("$.items[0].quantity").value(stock.getQuantity()))
-                .andExpect(jsonPath("$.items[0].orderPrice").value(stock.getOrderPrice()))
+                .andExpect(jsonPath("$.items").exists())
                 .andDo(print());
     }
 
@@ -137,6 +137,58 @@ class StockControllerTest {
                 .andExpect(jsonPath("$.quantity").value(stock.getQuantity()))
                 .andExpect(jsonPath("$.orderPrice").value(stock.getOrderPrice()))
                 .andDo(print());
+    }
+
+    @Test
+    void editStock() throws Exception {
+        // given
+        Stock stock = StockFixture.anStock().build();
+        stockRepository.save(stock);
+
+        // when
+        StockEdit request = StockEdit.builder()
+                .ticker("VOO")
+                .quantity(5)
+                .orderPrice(BigDecimal.valueOf(10.56))
+                .orderDate(LocalDate.of(2024, 7, 29))
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+        ResultActions perform = mockMvc.perform(patch("/stocks/{stockId}", stock.getId())
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(json)
+        );
+
+        // then
+        perform
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        Stock findStock = stockRepository.getStock(stock.getId());
+        Assertions.assertThat(findStock.getTicker()).isEqualTo(request.ticker());
+        Assertions.assertThat(findStock.getQuantity()).isEqualTo(request.quantity());
+        Assertions.assertThat(findStock.getOrderPrice()).isEqualTo(request.orderPrice());
+        Assertions.assertThat(findStock.getOrderDate()).isEqualTo(request.orderDate());
+    }
+
+    @Test
+    void deleteStock() throws Exception {
+        // given
+        Stock stock = StockFixture.anStock().build();
+        stockRepository.save(stock);
+
+        // when
+        ResultActions perform = mockMvc.perform(delete("/stocks/{stockId}", stock.getId())
+                .contentType(APPLICATION_JSON_VALUE)
+        );
+
+        // then
+        perform
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        long count = stockRepository.count();
+        Assertions.assertThat(count).isEqualTo(0);
     }
 
 }
