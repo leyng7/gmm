@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class DashboardControllerTest {
+class ChartControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -42,9 +42,8 @@ class DashboardControllerTest {
     }
 
     @Test
-    void getDashboardOfStock() throws Exception {
+    void getChartOfStock() throws Exception {
         // given
-
         List<Stock> stocks = IntStream.range(0, 10)
                 .mapToObj(i -> StockFixture.anStock().build())
                 .collect(Collectors.toList());

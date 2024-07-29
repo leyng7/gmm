@@ -5,7 +5,6 @@ import Page from '@/entity/data/Page'
 import StockAdd from '@/entity/stock/StockAdd'
 import type Pageable from '@/entity/data/Pageable'
 import type StockEdit from '@/entity/stock/StockEdit'
-import StockChart from '@/entity/stock/StockChart'
 
 @singleton()
 export default class StockRepository {
@@ -48,9 +47,4 @@ export default class StockRepository {
     })
   }
 
-  async getChartOfStock() {
-    return this.httpRepository.get<StockChart[]>({
-      path: `/api/dashboard/stocks`
-    }, Stock)
-  }
 }

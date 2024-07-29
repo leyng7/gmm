@@ -14,8 +14,10 @@ public class TickerService {
     private final TickerRepository tickerRepository;
 
     @Transactional
-    public Long addTicker(TickerAdd tickerAdd) {
+    public Long addTicker(TickerAdd request) {
         Ticker ticker = Ticker.builder()
+                .symbol(request.symbol())
+                .type(request.type())
                 .build();
 
         return tickerRepository.save(ticker).getId();
@@ -32,7 +34,7 @@ public class TickerService {
     @Transactional
     public void editTicker(Long tickerId, TickerEdit tickerEdit) {
         Ticker ticker = tickerRepository.getTicker(tickerId);
-        ticker.edit();
+        ticker.edit(tickerEdit.symbol(), tickerEdit.type());
     }
 
     @Transactional

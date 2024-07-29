@@ -1,4 +1,11 @@
 package com.gmm.modules.ticker;
 
-public class TickerEdit {
+import lombok.Builder;
+
+@Builder
+public record TickerEdit(
+        String symbol,
+        String type
+) {
+    
 }

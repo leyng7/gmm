@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.gmm.modules.stock.QStock.stock;
+import static com.gmm.modules.ticker.QTicker.ticker;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,4 +28,16 @@ public class DashboardQueryRepository {
                 .fetch();
     }
 
+    public List<ChartResponse> getChartOfTicker() {
+        return jpaQueryFactory
+                .select(Projections.constructor(
+                        ChartResponse.class,
+                        ticker.type,
+                        stock.orderPrice.multiply(stock.quantity).sum()
+                ))
+                .from(ticker)
+                .leftJoin(stock).on(ticker.symbol.eq(stock.ticker))
+                .groupBy(ticker.type)
+                .fetch();
+    }
 }

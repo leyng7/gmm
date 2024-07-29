@@ -8,13 +8,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class DashboardController {
+public class ChartController {
 
     private final DashboardQueryRepository dashboardQueryRepository;
 
-    @GetMapping("/dashboard/stocks")
-    public List<ChartResponse> getDashboardOfStock() {
+    @GetMapping("/charts/stocks")
+    public List<ChartResponse> getChartOfStock() {
         return dashboardQueryRepository.getChartOfStock();
+    }
+
+    @GetMapping("/charts/tickers")
+    public List<ChartResponse> getChartOfTicker() {
+        return dashboardQueryRepository.getChartOfTicker();
     }
 
 }
