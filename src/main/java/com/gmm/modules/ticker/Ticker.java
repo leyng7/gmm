@@ -20,9 +20,14 @@ public class Ticker {
     private String type;
 
     @Builder
-    public Ticker(String symbol, String type) {
+    public Ticker(Long id, String symbol, String type) {
+        this.id = id;
         this.symbol = symbol;
         this.type = type;
+    }
+
+    public Ticker(String symbol, String type) {
+        this(null, symbol, type);
     }
 
     public void edit(String symbol, String type) {

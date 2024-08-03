@@ -8,4 +8,6 @@ public interface TickerRepository extends JpaRepository<Ticker, Long> {
         return findById(tickerId).orElseThrow();
     }
 
+    public Ticker findBySymbol(String symbol);
+
 }
